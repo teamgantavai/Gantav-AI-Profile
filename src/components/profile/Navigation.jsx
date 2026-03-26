@@ -1,8 +1,9 @@
 import React from 'react';
-import { BookOpen, Target, Star, Award } from 'lucide-react';
+import { BookOpen, Target, Star, Award, Home } from 'lucide-react';
 
-const Navigation = ({ isDarkMode, activeTab, setActiveTab, user }) => {
+const Navigation = ({ isDarkMode, activeTab, setActiveTab, user, setActiveBottomTab }) => {
   const navItems = [
+    { id: 'home', icon: Home, title: 'Home', isGlobal: true },
     { id: 'courses', icon: BookOpen, title: 'Courses' },
     { id: 'goals', icon: Target, title: 'Goals' },
     { id: 'leaderboard', icon: Star, title: 'Leaderboard' },
@@ -27,8 +28,8 @@ const Navigation = ({ isDarkMode, activeTab, setActiveTab, user }) => {
           {navItems.map((item) => (
             <button 
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-14 h-14 rounded-full flex items-center justify-center transition-all relative ${activeTab === item.id ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white shadow-xl shadow-violet-900/40' : (isDarkMode ? 'text-slate-500 hover:text-white' : 'text-slate-500 hover:text-slate-900')}`} 
+              onClick={() => item.isGlobal ? setActiveBottomTab('Discover') : setActiveTab(item.id)}
+              className={`w-14 h-14 rounded-full flex items-center justify-center transition-all relative ${activeTab === item.id && !item.isGlobal ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white shadow-xl shadow-violet-900/40' : (isDarkMode ? 'text-slate-500 hover:text-white' : 'text-slate-500 hover:text-slate-900')}`} 
               title={item.title}
             >
               <div className="w-7 h-7 flex items-center justify-center">
@@ -47,8 +48,8 @@ const Navigation = ({ isDarkMode, activeTab, setActiveTab, user }) => {
           {navItems.map((item) => (
             <button 
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all relative ${activeTab === item.id ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white shadow-xl shadow-violet-900/40' : (isDarkMode ? 'text-slate-500 hover:text-white hover:bg-white/10' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100')}`} 
+              onClick={() => item.isGlobal ? setActiveBottomTab('Discover') : setActiveTab(item.id)}
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all relative ${activeTab === item.id && !item.isGlobal ? 'bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white shadow-xl shadow-violet-900/40' : (isDarkMode ? 'text-slate-500 hover:text-white hover:bg-white/10' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100')}`} 
               title={item.title}
             >
               <div className="w-6 h-6 flex items-center justify-center">

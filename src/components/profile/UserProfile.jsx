@@ -8,8 +8,7 @@ import Navigation from './Navigation';
 import EditProfileModal from './EditProfileModal';
 import SkeletonLoader from './SkeletonLoader';
 
-const UserProfile = () => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+const UserProfile = ({ activeBottomTab, setActiveBottomTab, isDarkMode, setIsDarkMode }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isLoading, setIsLoading] = useState(true);
@@ -169,7 +168,7 @@ const UserProfile = () => {
         </div>
       </main>
 
-      <Navigation isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} user={userWithComputedData} />
+      <Navigation isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} user={userWithComputedData} setActiveBottomTab={setActiveBottomTab} />
 
       {isEditModalOpen && (
         <EditProfileModal
