@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { X, Camera, RefreshCw, Save, Upload, Check, Trash2, Github, Linkedin, Twitter, MessageSquare, Instagram } from 'lucide-react';
+import { X, Camera, RefreshCw, Save, Upload, Check, Trash2, Code, Briefcase, Hash, MessageSquare } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 
 const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditForm, handleSave, isSaving }) => {
@@ -241,11 +241,11 @@ const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditFor
                     <h4 className={`text-[10px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Social IDs</h4>
                     <div className="grid grid-cols-1 gap-4">
                       {[
-                        { key: 'linkedin', label: 'LinkedIn', prefix: 'linkedin.com/in/', placeholder: 'username', icon: Linkedin },
-                        { key: 'github', label: 'GitHub', prefix: 'github.com/', placeholder: 'username', icon: Github },
-                        { key: 'x', label: 'X (Twitter)', prefix: 'x.com/', placeholder: 'handle', icon: Twitter },
+                        { key: 'linkedin', label: 'LinkedIn', prefix: 'linkedin.com/in/', placeholder: 'username', icon: Briefcase },
+                        { key: 'github', label: 'GitHub', prefix: 'github.com/', placeholder: 'username', icon: Code },
+                        { key: 'x', label: 'X (Twitter)', prefix: 'x.com/', placeholder: 'handle', icon: Hash },
                         { key: 'discord', label: 'Discord', prefix: '@', placeholder: 'username', icon: MessageSquare },
-                        { key: 'instagram', label: 'Instagram', prefix: 'instagram.com/', placeholder: 'id', icon: Instagram }
+                        { key: 'instagram', label: 'Instagram', prefix: 'instagram.com/', placeholder: 'id', icon: Camera }
                       ].map((item) => (
                         <div key={item.key} className="space-y-1.5">
                           <label className={`text-[9px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>{item.label}</label>
