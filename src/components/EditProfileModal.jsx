@@ -1,14 +1,16 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { X, Camera, RefreshCw, Save, Upload, Check, Trash2 } from 'lucide-react';
+import { X, Camera, RefreshCw, Save, Upload, Check, Trash2, Github, Linkedin, Twitter, MessageSquare, Instagram } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 
-const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditForm, handleSave }) => {
+const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditForm, handleSave, isSaving }) => {
   const [image, setImage] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isCropping, setIsCropping] = useState(false);
+  const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
+
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -21,10 +23,13 @@ const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditFor
       reader.addEventListener('load', () => {
         setImage(reader.result);
         setIsCropping(true);
+        setError(null);
       });
+      reader.addEventListener('error', () => setError('Failed to read file.'));
       reader.readAsDataURL(file);
     }
   };
+
 
   const createImage = (url) =>
     new Promise((resolve, reject) => {
@@ -62,14 +67,17 @@ const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditFor
 
   const handleCropSave = async () => {
     try {
+      if (!croppedAreaPixels) return;
       const croppedImage = await getCroppedImg(image, croppedAreaPixels);
       setEditForm({ ...editForm, avatar: croppedImage, useGeneratedAvatar: false });
       setIsCropping(false);
       setImage(null);
     } catch (e) {
       console.error(e);
+      setError('Failed to crop image.');
     }
   };
+
 
   const removeAvatar = () => {
     setEditForm({ ...editForm, avatar: null, useGeneratedAvatar: true });
@@ -221,19 +229,69 @@ const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditFor
                     <label className={`text-[10px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Bio</label>
                     <textarea 
                       rows="3"
-                      value={editForm.bio} 
+                      value={editForm.bio || ''} 
                       onChange={(e) => setEditForm({...editForm, bio: e.target.value})}
                       placeholder="Tell us about yourself..."
                       className={`w-full p-4 rounded-2xl border font-bold focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all resize-none ${isDarkMode ? 'bg-slate-900/50 border-white/10 text-white placeholder:text-slate-700' : 'bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400'}`}
                     />
                   </div>
+
+                  {/* Social Links Editing */}
+                  <div className="pt-4 space-y-4">
+                    <h4 className={`text-[10px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Social IDs</h4>
+                    <div className="grid grid-cols-1 gap-4">
+                      {[
+                        { key: 'linkedin', label: 'LinkedIn', prefix: 'linkedin.com/in/', placeholder: 'username', icon: Linkedin },
+                        { key: 'github', label: 'GitHub', prefix: 'github.com/', placeholder: 'username', icon: Github },
+                        { key: 'x', label: 'X (Twitter)', prefix: 'x.com/', placeholder: 'handle', icon: Twitter },
+                        { key: 'discord', label: 'Discord', prefix: '@', placeholder: 'username', icon: MessageSquare },
+                        { key: 'instagram', label: 'Instagram', prefix: 'instagram.com/', placeholder: 'id', icon: Instagram }
+                      ].map((item) => (
+                        <div key={item.key} className="space-y-1.5">
+                          <label className={`text-[9px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>{item.label}</label>
+                          <div className={`flex items-center rounded-xl border overflow-hidden transition-all focus-within:ring-2 focus-within:ring-violet-500 ${isDarkMode ? 'bg-slate-900/30 border-white/5' : 'bg-slate-100 border-slate-200'}`}>
+                            <div className={`pl-4 flex items-center gap-2 pr-2 text-[10px] font-black opacity-40 select-none ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                              <item.icon className="w-3 h-3" />
+                              <span>{item.prefix}</span>
+                            </div>
+                            <input 
+                              type="text"
+                              value={editForm.socials?.[item.key] || ''}
+                              onChange={(e) => setEditForm({
+                                ...editForm, 
+                                socials: { ...editForm.socials, [item.key]: e.target.value }
+                              })}
+                              placeholder={item.placeholder}
+                              className={`w-full p-3 bg-transparent text-xs font-bold focus:outline-none ${isDarkMode ? 'text-white placeholder:text-slate-800' : 'text-slate-900 placeholder:text-slate-300'}`}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+
+                {error && (
+                  <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 text-[10px] font-black uppercase tracking-widest p-3 rounded-xl text-center">
+                    {error}
+                  </div>
+                )}
 
                 <button 
                   onClick={handleSave}
-                  className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-black py-5 rounded-[2rem] shadow-xl shadow-violet-900/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-4"
+                  disabled={isSaving}
+                  className={`w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-black py-5 rounded-[2rem] shadow-xl shadow-violet-900/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-4 ${isSaving ? 'opacity-80 cursor-wait' : ''}`}
                 >
-                  <Save className="w-5 h-5" /> Save Profile
+                  {isSaving ? (
+                    <div className="flex items-center gap-2">
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      Saving Workspace...
+                    </div>
+                  ) : (
+                    <>
+                      <Save className="w-5 h-5" /> Save Profile
+                    </>
+                  )}
                 </button>
               </div>
             </div>

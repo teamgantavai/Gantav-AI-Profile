@@ -13,6 +13,8 @@ const UserProfile = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('profile'); // profile, courses, goals, leaderboard
+  const [isSaving, setIsSaving] = useState(false);
 
   // Simulate initial load — 1.2s shimmer then reveal content
   useEffect(() => {
@@ -39,23 +41,44 @@ const UserProfile = () => {
     streak: 12,
     points: 4850,
     progress: 68,
-    levelValue: 42,
     location: "New Delhi, IN",
-    nextLevelExp: 75,
     avatarSeed: "Aryan",
     avatarStyle: "avataaars",
     avatar: null,
+    socials: {
+      github: "aryan-sharma",
+      linkedin: "aryan-sharma",
+      x: "aryan_ai",
+      discord: "aryan#1234",
+      instagram: "aryan_ai"
+    },
+    activity: [
+      { id: 1, type: 'course', title: 'Neural Networks Basics', status: 'completed', date: '2 days ago' },
+      { id: 2, type: 'goal', title: 'Master React Patterns', status: 'in-progress', date: '5 hours ago' },
+      { id: 3, type: 'quiz', title: 'Python for AI', score: 95, date: '1 week ago' }
+    ],
     certificates: [
       { id: 1, name: "Neural Networks & Deep Learning", issuer: "Gantav x DeepLearning.AI", date: "Aug 2025" },
       { id: 2, name: "Advanced React Patterns",        issuer: "Gantav AI Academy",       date: "June 2025" }
     ]
   });
 
+  // Compute level and EXP from points
+  const pointsPerLevel = 500;
+  const levelValue = Math.floor(user.points / pointsPerLevel) + 1;
+  const nextLevelExp = Math.floor((user.points % pointsPerLevel) / pointsPerLevel * 100);
+  
+  const userWithComputedData = { ...user, levelValue, nextLevelExp };
+
   const [editForm, setEditForm] = useState({ ...user });
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    setIsSaving(true);
+    // Simulate API delay
+    await new Promise(r => setTimeout(r, 1000));
     setUser({ ...editForm });
     setIsEditModalOpen(false);
+    setIsSaving(false);
   };
 
   const getStatusConfig = () => {
@@ -95,21 +118,58 @@ const UserProfile = () => {
 
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-32 lg:pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 xl:gap-8 items-start">
-          <ProfileCard
-            user={user}
-            isDarkMode={isDarkMode}
-            setIsEditModalOpen={setIsEditModalOpen}
-            config={config}
-          />
-          <div className="lg:col-span-3 flex flex-col gap-6">
-            <GoalIntelligence user={user} isDarkMode={isDarkMode} />
-            <VerifiedCredentials user={user} isDarkMode={isDarkMode} />
+        <div className={`grid grid-cols-1 ${activeTab === 'profile' ? 'lg:grid-cols-5' : 'lg:grid-cols-1'} gap-6 xl:gap-8 items-start`}>
+          {activeTab === 'profile' && (
+            <ProfileCard
+              user={userWithComputedData}
+              isDarkMode={isDarkMode}
+              setIsEditModalOpen={setIsEditModalOpen}
+              config={config}
+            />
+          )}
+          <div className={`${activeTab === 'profile' ? 'lg:col-span-3' : 'max-w-4xl mx-auto w-full'} flex flex-col gap-6`}>
+            {activeTab === 'profile' && (
+              <>
+                <GoalIntelligence user={userWithComputedData} isDarkMode={isDarkMode} />
+                <div className={`p-8 rounded-[2.5rem] border backdrop-blur-3xl ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white border-slate-200'}`}>
+                  <h3 className="text-xl font-black mb-6">Execution Log / History</h3>
+                  <div className="space-y-4">
+                    {user.activity.map(act => (
+                      <div key={act.id} className={`flex items-center justify-between p-4 rounded-2xl border ${isDarkMode ? 'bg-black/20 border-white/5' : 'bg-slate-50 border-slate-200 shadow-sm'}`}>
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDarkMode ? 'bg-violet-500/20 text-violet-400' : 'bg-violet-100 text-violet-600'}`}>
+                            {act.type === 'course' ? '📚' : act.type === 'goal' ? '🎯' : '📝'}
+                          </div>
+                          <div>
+                            <div className="text-sm font-black">{act.title}</div>
+                            <div className="text-[10px] opacity-60 uppercase font-bold tracking-widest">{act.date} • {act.type}</div>
+                          </div>
+                        </div>
+                        <div className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg ${act.status === 'completed' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-amber-500/20 text-amber-500'}`}>
+                          {act.status || `${act.score}%`}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <VerifiedCredentials user={userWithComputedData} isDarkMode={isDarkMode} />
+              </>
+            )}
+            {activeTab !== 'profile' && (
+              <div className="flex flex-col items-center justify-center py-20 text-center opacity-60">
+                <div className="w-20 h-20 rounded-3xl bg-violet-500/10 flex items-center justify-center mb-6">
+                  <span className="text-4xl text-violet-500">🚧</span>
+                </div>
+                <h3 className="text-2xl font-black uppercase tracking-tighter mb-2">{activeTab} module</h3>
+                <p className="text-sm font-bold">This section is currently being architected.</p>
+                <button onClick={() => setActiveTab('profile')} className="mt-6 text-violet-500 font-black text-xs uppercase tracking-widest">Return to Profile</button>
+              </div>
+            )}
           </div>
         </div>
       </main>
 
-      <Navigation isDarkMode={isDarkMode} />
+      <Navigation isDarkMode={isDarkMode} activeTab={activeTab} setActiveTab={setActiveTab} user={userWithComputedData} />
 
       {isEditModalOpen && (
         <EditProfileModal
@@ -118,6 +178,7 @@ const UserProfile = () => {
           editForm={editForm}
           setEditForm={setEditForm}
           handleSave={handleSave}
+          isSaving={isSaving}
         />
       )}
     </div>

@@ -2,6 +2,23 @@ import React from 'react';
 import { Sun, Moon, Share2 } from 'lucide-react';
 
 const Header = ({ isDarkMode, setIsDarkMode }) => {
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Gantav AI Profile',
+          text: 'Check out my AI learning profile on Gantav!',
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Profile link copied to clipboard!');
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
+  };
+
   return (
     <header className={`sticky top-0 z-[60] w-full border-b transition-colors duration-500 ${isDarkMode ? 'bg-[#070B16]/80 border-white/5 text-white' : 'bg-white/90 border-slate-200 text-slate-900'} backdrop-blur-2xl`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -22,7 +39,11 @@ const Header = ({ isDarkMode, setIsDarkMode }) => {
           >
             {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
           </button>
-          <button className={`p-2.5 rounded-2xl border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-slate-200 hover:bg-slate-50 shadow-sm'}`} title="Share profile">
+          <button 
+            onClick={handleShare}
+            className={`p-2.5 rounded-2xl border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-slate-200 hover:bg-slate-50 shadow-sm'}`} 
+            title="Share profile"
+          >
             <Share2 className="w-4 h-4" />
           </button>
         </div>

@@ -10,20 +10,32 @@ const VerifiedCredentials = ({ user, isDarkMode }) => {
       </div>
       
       <div className="space-y-3">
-        {user.certificates.map((cert) => (
-          <div key={cert.id} className={`border rounded-[1.8rem] p-5 flex items-center gap-5 transition-all ${isDarkMode ? 'bg-white/5 border-white/5 hover:border-violet-500/30' : 'bg-slate-50 border-slate-200 hover:border-violet-500/40 hover:shadow-md shadow-sm'}`}>
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border shadow-md ${isDarkMode ? 'bg-slate-800 border-white/10' : 'bg-white border-slate-200'}`}>
-              <Award className="w-7 h-7 text-violet-500" />
+        {user.certificates.length > 0 ? (
+          user.certificates.map((cert) => (
+            <div key={cert.id} className={`border rounded-[1.8rem] p-5 flex items-center gap-5 transition-all ${isDarkMode ? 'bg-white/5 border-white/5 hover:border-violet-500/30' : 'bg-slate-50 border-slate-200 hover:border-violet-500/40 hover:shadow-md shadow-sm'}`}>
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border shadow-md ${isDarkMode ? 'bg-slate-800 border-white/10' : 'bg-white border-slate-200'}`}>
+                <Award className="w-7 h-7 text-violet-500" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className={`text-xs font-black truncate leading-tight uppercase tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{cert.name}</div>
+                <div className={`text-[10px] mt-1 font-bold ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>{cert.issuer} • {cert.date}</div>
+              </div>
+              <button className={`p-3 rounded-2xl border transition-colors shrink-0 ${isDarkMode ? 'bg-slate-900 border-white/5 hover:bg-slate-800' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
+                <ExternalLink className="w-4 h-4" />
+              </button>
             </div>
-            <div className="flex-1 min-w-0">
-              <div className={`text-xs font-black truncate leading-tight uppercase tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{cert.name}</div>
-              <div className={`text-[10px] mt-1 font-bold ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>{cert.issuer} • {cert.date}</div>
+          ))
+        ) : (
+          <div className={`border-2 border-dashed rounded-[1.8rem] p-12 text-center flex flex-col items-center gap-4 ${isDarkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50 border-slate-200'}`}>
+            <div className={`w-16 h-16 rounded-3xl flex items-center justify-center ${isDarkMode ? 'bg-white/5' : 'bg-white border'}`}>
+              <Award className="w-8 h-8 text-slate-400" />
             </div>
-            <button className={`p-3 rounded-2xl border transition-colors shrink-0 ${isDarkMode ? 'bg-slate-900 border-white/5 hover:bg-slate-800' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'}`}>
-              <ExternalLink className="w-4 h-4" />
-            </button>
+            <div>
+              <div className={`text-sm font-black uppercase tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>No Credentials Yet</div>
+              <p className={`text-[10px] font-bold mt-1 max-w-[200px] mx-auto opacity-60 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Complete courses and challenges to earn verified digital certificates.</p>
+            </div>
           </div>
-        ))}
+        )}
       </div>
     </section>
   );
