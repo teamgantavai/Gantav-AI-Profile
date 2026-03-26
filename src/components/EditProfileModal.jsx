@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react';
-import { X, Camera, RefreshCw, Save, Upload, Check, Trash2, Code, Briefcase, Hash, MessageSquare } from 'lucide-react';
+import { X, Camera, RefreshCw, Save, Upload, Check, Trash2, MessageSquare, Briefcase, Code, AtSign, Link } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 
 const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditForm, handleSave, isSaving }) => {
@@ -243,7 +243,7 @@ const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditFor
                       {[
                         { key: 'linkedin', label: 'LinkedIn', prefix: 'linkedin.com/in/', placeholder: 'username', icon: Briefcase },
                         { key: 'github', label: 'GitHub', prefix: 'github.com/', placeholder: 'username', icon: Code },
-                        { key: 'x', label: 'X (Twitter)', prefix: 'x.com/', placeholder: 'handle', icon: Hash },
+                        { key: 'x', label: 'X (Twitter)', prefix: 'x.com/', placeholder: 'handle', icon: AtSign },
                         { key: 'discord', label: 'Discord', prefix: '@', placeholder: 'username', icon: MessageSquare },
                         { key: 'instagram', label: 'Instagram', prefix: 'instagram.com/', placeholder: 'id', icon: Camera }
                       ].map((item) => (
