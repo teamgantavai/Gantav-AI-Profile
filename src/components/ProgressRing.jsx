@@ -28,7 +28,7 @@ const ProgressRing = ({ isDarkMode, size = 200, stroke = 11, percentage = 68 }) 
             </radialGradient>
             {/* Lightweight SVG glow instead of DOM blur */}
             <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feGaussianBlur stdDeviation="1.5" result="blur" />
               <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
           </defs>

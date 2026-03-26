@@ -11,9 +11,9 @@ const ProfileCard = ({ user, isDarkMode, setIsEditModalOpen, config }) => {
           <div className="relative">
             <div className={`w-32 h-32 lg:w-36 lg:h-36 rounded-[2.5rem] border-[3px] p-2 transition-transform duration-700 hover:rotate-3 ${isDarkMode ? 'bg-slate-900/80 font-bold' : 'bg-slate-100'} border-amber-400`}>
               <img 
-                src={`https://api.dicebear.com/7.x/${user.avatarStyle}/svg?seed=${user.avatarSeed}`} 
+                src={user.avatar || `https://api.dicebear.com/7.x/${user.avatarStyle}/svg?seed=${user.avatarSeed}`} 
                 alt="Avatar" 
-                className={`rounded-[2rem] w-full h-full object-cover ${isDarkMode ? 'bg-slate-800' : 'bg-slate-200'}`}
+                className={`rounded-[2rem] w-full h-full object-cover shadow-inner ${isDarkMode ? 'bg-slate-800' : 'bg-slate-200'}`}
               />
             </div>
             <div className={`absolute -bottom-2 -right-2 bg-gradient-to-br from-violet-600 to-fuchsia-600 text-white w-12 h-12 rounded-2xl shadow-2xl border-[4px] flex items-center justify-center flex-col leading-none ${isDarkMode ? 'border-[#131b2b]' : 'border-white'}`}>

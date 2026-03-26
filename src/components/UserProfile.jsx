@@ -16,7 +16,7 @@ const UserProfile = () => {
 
   // Simulate initial load — 1.2s shimmer then reveal content
   useEffect(() => {
-    const t = setTimeout(() => setIsLoading(false), 1200);
+    const t = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(t);
   }, []);
 
@@ -44,6 +44,7 @@ const UserProfile = () => {
     nextLevelExp: 75,
     avatarSeed: "Aryan",
     avatarStyle: "avataaars",
+    avatar: null,
     certificates: [
       { id: 1, name: "Neural Networks & Deep Learning", issuer: "Gantav x DeepLearning.AI", date: "Aug 2025" },
       { id: 2, name: "Advanced React Patterns",        issuer: "Gantav AI Academy",       date: "June 2025" }
@@ -72,35 +73,22 @@ const UserProfile = () => {
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-[#070B16] text-slate-200' : 'bg-[#F1F5F9] text-slate-900'} font-['Sora','sans-serif'] selection:bg-violet-500/30`}>
 
-      {/* Background blobs — fixed & GPU-composited, no repaints */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <div className={`absolute -top-24 -right-24 w-80 h-80 rounded-full gpu ${isDarkMode ? 'bg-violet-600/8' : 'bg-violet-600/12'}`}
-          style={{ filter: 'blur(80px)' }} />
-        <div className={`absolute top-1/2 -left-24 w-64 h-64 rounded-full gpu ${isDarkMode ? 'bg-blue-600/6' : 'bg-blue-600/10'}`}
-          style={{ filter: 'blur(70px)' }} />
+        <div className={`absolute -top-24 -right-24 w-80 h-80 rounded-full gpu ${isDarkMode ? 'bg-violet-600/5' : 'bg-violet-600/8'}`}
+          style={{ filter: 'blur(50px)' }} />
+        <div className={`absolute top-1/2 -left-24 w-64 h-64 rounded-full gpu ${isDarkMode ? 'bg-blue-600/4' : 'bg-blue-600/6'}`}
+          style={{ filter: 'blur(40px)' }} />
       </div>
 
       {/* Sticky Header */}
       <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
 
-      {/* Network Alert */}
+      {/* Network Alert (Small bottom toast) */}
       {!isOnline && (
-        <div className="fixed top-20 left-0 right-0 z-[55] px-6 pointer-events-none">
-          <div className={`max-w-sm mx-auto border rounded-[2rem] p-5 shadow-2xl transition-all gpu ${isDarkMode ? 'bg-[#0e0a1c]/95 border-rose-500/20 shadow-rose-900/30' : 'bg-rose-50/95 border-rose-200'}`}
-            style={{ backdropFilter: 'blur(16px)' }}>
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-11 h-11 rounded-2xl bg-rose-500/20 flex items-center justify-center shrink-0">
-                <WifiOff className="w-5 h-5 text-rose-500 animate-pulse" />
-              </div>
-              <div>
-                <div className={`text-xs font-black uppercase tracking-[0.18em] ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`}>Network Offline</div>
-                <div className={`text-[10px] font-bold mt-0.5 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Check your connection</div>
-              </div>
-            </div>
-            {/* Sweep progress bar */}
-            <div className={`h-1 w-full rounded-full overflow-hidden ${isDarkMode ? 'bg-white/5' : 'bg-rose-500/10'}`}>
-              <div className="h-full w-1/3 bg-rose-500 rounded-full sweep" />
-            </div>
+        <div className="fixed bottom-6 left-6 right-6 z-[60] sm:max-w-xs sm:left-auto pointer-events-none animate-in fade-in slide-in-from-bottom-5">
+          <div className={`px-4 py-3 rounded-2xl border flex items-center gap-3 shadow-xl backdrop-blur-md transition-all ${isDarkMode ? 'bg-[#0e0a1c]/90 border-rose-500/20 shadow-rose-900/40 text-rose-100' : 'bg-rose-50/95 border-rose-200 text-rose-900'}`}>
+            <WifiOff className="w-4 h-4 text-rose-500 shrink-0" />
+            <span className="text-xs font-bold tracking-tight">Offline. Progress may not save.</span>
           </div>
         </div>
       )}
