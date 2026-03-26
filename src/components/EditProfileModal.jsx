@@ -83,6 +83,23 @@ const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditFor
     setEditForm({ ...editForm, avatar: null, useGeneratedAvatar: true });
   };
 
+  const onSaveClick = () => {
+    if (!editForm.name?.trim()) {
+      setError('Full Name is required.');
+      return;
+    }
+    if (!editForm.destination?.trim()) {
+      setError('Career Goal is required.');
+      return;
+    }
+    if (!editForm.location?.trim()) {
+      setError('Location is required.');
+      return;
+    }
+    setError(null);
+    handleSave();
+  };
+
   return (
     <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-slate-950/80 backdrop-blur-md">
       <div className={`w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-[3rem] sm:rounded-[3rem] p-8 border shadow-2xl transition-all ${isDarkMode ? 'bg-[#0D1625] border-white/10 text-white' : 'bg-white border-slate-200 text-slate-900'}`}>
@@ -226,6 +243,16 @@ const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditFor
                     />
                   </div>
                   <div className="space-y-2">
+                    <label className={`text-[10px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Location</label>
+                    <input 
+                      type="text" 
+                      value={editForm.location || ''} 
+                      onChange={(e) => setEditForm({...editForm, location: e.target.value})}
+                      placeholder="e.g. New Delhi, IN"
+                      className={`w-full p-4 rounded-2xl border font-bold focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all ${isDarkMode ? 'bg-slate-900/50 border-white/10 text-white placeholder:text-slate-700' : 'bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400'}`}
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <label className={`text-[10px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>Bio</label>
                     <textarea 
                       rows="3"
@@ -278,7 +305,7 @@ const EditProfileModal = ({ isDarkMode, setIsEditModalOpen, editForm, setEditFor
                 )}
 
                 <button 
-                  onClick={handleSave}
+                  onClick={onSaveClick}
                   disabled={isSaving}
                   className={`w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-black py-5 rounded-[2rem] shadow-xl shadow-violet-900/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-4 ${isSaving ? 'opacity-80 cursor-wait' : ''}`}
                 >
