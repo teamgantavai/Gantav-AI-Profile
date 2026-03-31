@@ -8,12 +8,46 @@ import Navigation from './Navigation';
 import EditProfileModal from './EditProfileModal';
 import SkeletonLoader from './SkeletonLoader';
 
-const UserProfile = ({ activeBottomTab, setActiveBottomTab, isDarkMode, setIsDarkMode }) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const UserProfile = ({ activeBottomTab, setActiveBottomTab, isDarkMode, setIsDarkMode, clerkUser, forceEditModal = false, onProfileSetup }) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(forceEditModal || false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('profile'); // profile, courses, goals, leaderboard
   const [isSaving, setIsSaving] = useState(false);
+
+  // Initialize user with Google data if available
+  const getInitialUserData = () => {
+    const googleName = clerkUser?.firstName && clerkUser?.lastName
+      ? `${clerkUser.firstName} ${clerkUser.lastName}`
+      : clerkUser?.firstName
+        ? clerkUser.firstName
+        : "User";
+
+    return {
+      name: googleName,
+      bio: "Building my future with AI learning at Gantav.",
+      destination: "",
+      level: "Beginner",
+      streak: 0,
+      points: 0,
+      progress: 0,
+      location: "",
+      avatarSeed: googleName,
+      avatarStyle: "avataaars",
+      avatar: clerkUser?.imageUrl || null,
+      socials: {
+        github: "",
+        linkedin: "",
+        x: "",
+        discord: "",
+        instagram: ""
+      },
+      activity: [
+        { id: 1, type: 'course', title: 'Welcome to Gantav', status: 'in-progress', date: 'Today' }
+      ],
+      certificates: []
+    };
+  };
 
   // Simulate initial load — 1.2s shimmer then reveal content
   useEffect(() => {
@@ -22,54 +56,26 @@ const UserProfile = ({ activeBottomTab, setActiveBottomTab, isDarkMode, setIsDar
   }, []);
 
   useEffect(() => {
-    const handleOnline  = () => setIsOnline(true);
+    const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    window.addEventListener('online',  handleOnline);
+    window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     return () => {
-      window.removeEventListener('online',  handleOnline);
+      window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
   }, []);
 
-  const [user, setUser] = useState({
-    name: "Aryan Sharma",
-    bio: "Building the future of AI-driven education. Currently mastering Neural Architectures.",
-    destination: "Senior AI Engineer at Google",
-    level: "Intermediate",
-    streak: 12,
-    points: 4850,
-    progress: 68,
-    location: "New Delhi, IN",
-    avatarSeed: "Aryan",
-    avatarStyle: "avataaars",
-    avatar: null,
-    socials: {
-      github: "aryan-sharma",
-      linkedin: "aryan-sharma",
-      x: "aryan_ai",
-      discord: "aryan#1234",
-      instagram: "aryan_ai"
-    },
-    activity: [
-      { id: 1, type: 'course', title: 'Neural Networks Basics', status: 'completed', date: '2 days ago' },
-      { id: 2, type: 'goal', title: 'Master React Patterns', status: 'in-progress', date: '5 hours ago' },
-      { id: 3, type: 'quiz', title: 'Python for AI', score: 95, date: '1 week ago' }
-    ],
-    certificates: [
-      { id: 1, name: "Neural Networks & Deep Learning", issuer: "Gantav x DeepLearning.AI", date: "Aug 2025" },
-      { id: 2, name: "Advanced React Patterns",        issuer: "Gantav AI Academy",       date: "June 2025" }
-    ]
-  });
+  const [user, setUser] = useState(getInitialUserData());
 
   // Compute level and EXP from points
   const pointsPerLevel = 500;
   const levelValue = Math.floor(user.points / pointsPerLevel) + 1;
   const nextLevelExp = Math.floor((user.points % pointsPerLevel) / pointsPerLevel * 100);
-  
+
   const userWithComputedData = { ...user, levelValue, nextLevelExp };
 
-  const [editForm, setEditForm] = useState({ ...user });
+  const [editForm, setEditForm] = useState(getInitialUserData());
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -78,13 +84,18 @@ const UserProfile = ({ activeBottomTab, setActiveBottomTab, isDarkMode, setIsDar
     setUser({ ...editForm });
     setIsEditModalOpen(false);
     setIsSaving(false);
+
+    // Notify parent that profile setup is complete
+    if (forceEditModal && onProfileSetup) {
+      onProfileSetup();
+    }
   };
 
   const getStatusConfig = () => {
     switch (user.level) {
       case 'Professional': return { color: 'from-violet-500 to-fuchsia-500', text: isDarkMode ? 'text-violet-400' : 'text-violet-700' };
-      case 'Intermediate': return { color: 'from-amber-400 to-orange-500',   text: isDarkMode ? 'text-amber-400'  : 'text-amber-700'  };
-      default:             return { color: 'from-emerald-400 to-teal-500',   text: isDarkMode ? 'text-emerald-400': 'text-emerald-700'};
+      case 'Intermediate': return { color: 'from-amber-400 to-orange-500', text: isDarkMode ? 'text-amber-400' : 'text-amber-700' };
+      default: return { color: 'from-emerald-400 to-teal-500', text: isDarkMode ? 'text-emerald-400' : 'text-emerald-700' };
     }
   };
   const config = getStatusConfig();
