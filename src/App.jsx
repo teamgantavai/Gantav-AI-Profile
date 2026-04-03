@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useUser } from './useAuth';           // Firebase auth hook
+import { useUser } from './useAuth';
 import { logOut } from './firebase';
 import Home from './components/home/Home';
 import UserProfile from './components/profile/UserProfile';
@@ -8,11 +8,10 @@ import LoginScreen from './components/Authentication/LoginScreen';
 import SignUpScreen from './components/Authentication/SignUpScreen';
 
 function AppContent() {
-  const { isSignedIn, isLoaded, user } = useUser();
+  const { isSignedIn, isLoaded, user, profile } = useUser();
   const [activeBottomTab, setActiveBottomTab] = useState('Discover');
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [authScreen, setAuthScreen] = useState('login'); // 'login' | 'signup'
-  const [showProfileSetup, setShowProfileSetup] = useState(true);
+  const [authScreen, setAuthScreen] = useState('login');
 
   // ── Loading ────────────────────────────────────────────────────────────────
   if (!isLoaded) {
@@ -30,19 +29,21 @@ function AppContent() {
       : <LoginScreen onNavigate={setAuthScreen} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />;
   }
 
+  // Profile not yet complete → show profile screen with edit modal open
+  const profileComplete = profile?.profileComplete;
+
   // ── Main app ───────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen">
-      {activeBottomTab === 'Profile' || showProfileSetup ? (
+      {activeBottomTab === 'Profile' || !profileComplete ? (
         <UserProfile
           activeBottomTab={activeBottomTab}
           setActiveBottomTab={setActiveBottomTab}
           isDarkMode={isDarkMode}
           setIsDarkMode={setIsDarkMode}
-          firebaseUser={user}           // Firebase User object (replaces clerkUser)
-          forceEditModal={showProfileSetup}
-          onProfileSetup={() => setShowProfileSetup(false)}
-          onSignOut={logOut}            // Pass logOut for the profile/settings screen
+          firebaseUser={user}
+          forceEditModal={!profileComplete}
+          onSignOut={logOut}
         />
       ) : (
         <Home
@@ -60,7 +61,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* No /sso-callback route needed — Firebase uses popups, not redirects */}
         <Route path="/*" element={<AppContent />} />
       </Routes>
     </BrowserRouter>
