@@ -137,16 +137,16 @@ const ProfileCard = ({ user, isDarkMode, setIsEditModalOpen, config }) => {
             )}
           </div>
 
-          {/* XP Progress */}
+          {/* Course Progress */}
           <div className="w-full space-y-2 mb-6">
             <div className="flex justify-between items-end px-1">
-              <span className={`text-[10px] font-black uppercase tracking-widest ${d ? 'text-slate-500' : 'text-slate-600'}`}>Next Level</span>
-              <span className={`text-xs font-black ${d ? 'text-white' : 'text-slate-900'}`}>{user.nextLevelExp}%</span>
+              <span className={`text-[10px] font-black uppercase tracking-widest ${d ? 'text-slate-500' : 'text-slate-600'}`}>Course Progression</span>
+              <span className={`text-xs font-black ${d ? 'text-white' : 'text-slate-900'}`}>{user.courseProgression || 0}%</span>
             </div>
             <div className={`h-2.5 rounded-full border p-0.5 overflow-hidden ${d ? 'bg-slate-900/50 border-white/5' : 'bg-slate-200 border-slate-300'}`}>
               <div
                 className={`h-full rounded-full bg-gradient-to-r transition-all duration-700 ${config.color}`}
-                style={{ width: `${Math.max(user.nextLevelExp, 2)}%` }}
+                style={{ width: `${Math.max(user.courseProgression || 0, 0)}%` }}
               />
             </div>
           </div>

@@ -19,7 +19,12 @@ Welcome to the future of AI-driven education. To maintain the integrity of our n
 - **Privacy**: We respect your neural data. Ensure your location and bio do not reveal sensitive PII (Personally Identifiable Information) beyond professional requirements.
 - **Synergy**: Collaborate, don't contaminate. Share your progress to inspire others, but keep the ecosystem clean of spam.
 
-## 4. Technical Guidelines
+## 4. Nexus Arena (Leaderboard)
+- **Fair Competition**: Compete actively within your Cohort or Global league, but manipulation of XP to boost rankings is strictly forbidden.
+- **Collaboration**: The arena encourages collaboration. Top ranks unlock special peer-mentorship ("Collab") features. Do not use this to spam other learners.
+- **Privacy Controls**: If you prefer not to be ranked, you may toggle your visibility to 'Incognito' in Account Settings (coming soon).
+
+## 5. Technical Guidelines
 - **Offline Mode**: The platform works offline, but progress is only synchronized when a stable network is detected.
 - **Optimized Experience**: To ensure visual stability, avoid heavy DOM manipulation. The app uses GPU-accelerated blurs and SVG-based rendering for peak performance.
 - **System Theme**: Respect the dark/light mode toggle. The dark-mode interface is designed for high-focus neural sessions.
@@ -29,4 +34,4 @@ Welcome to the future of AI-driven education. To maintain the integrity of our n
 > [!IMPORTANT]
 > Failure to follow these rules may result in a degradation of your **Architect Status** or a temporary suspension of your developer credentials.
 
-*Last Updated: 2026-03-26*
+*Last Updated: 2026-04-03*

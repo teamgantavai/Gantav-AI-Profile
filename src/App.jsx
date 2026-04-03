@@ -6,6 +6,9 @@ import Home from './components/home/Home';
 import UserProfile from './components/profile/UserProfile';
 import LoginScreen from './components/Authentication/LoginScreen';
 import SignUpScreen from './components/Authentication/SignUpScreen';
+import Leaderboard from './components/leaderboard/Leaderboard';
+import GlobalHeader from './components/layout/GlobalHeader';
+import GlobalNav from './components/layout/GlobalNav';
 
 function AppContent() {
   const { isSignedIn, isLoaded, user, profile } = useUser();
@@ -34,7 +37,9 @@ function AppContent() {
 
   // ── Main app ───────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <GlobalHeader isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onSignOut={logOut} />
+      
       {activeBottomTab === 'Profile' || !profileComplete ? (
         <UserProfile
           activeBottomTab={activeBottomTab}
@@ -45,6 +50,8 @@ function AppContent() {
           forceEditModal={!profileComplete}
           onSignOut={logOut}
         />
+      ) : activeBottomTab === 'Leaderboard' ? (
+        <Leaderboard isDarkMode={isDarkMode} />
       ) : (
         <Home
           activeBottomTab={activeBottomTab}
@@ -53,6 +60,13 @@ function AppContent() {
           setIsDarkMode={setIsDarkMode}
         />
       )}
+
+      <GlobalNav 
+        activeBottomTab={activeBottomTab} 
+        setActiveBottomTab={setActiveBottomTab} 
+        isDarkMode={isDarkMode} 
+        user={profile} 
+      />
     </div>
   );
 }

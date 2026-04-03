@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { WifiOff } from 'lucide-react';
-import Header from './Header';
 import ProfileCard from './ProfileCard';
 import GoalIntelligence from './GoalIntelligence';
 import VerifiedCredentials from './VerifiedCredentials';
-import Navigation from './Navigation';
+
 import EditProfileModal from './EditProfileModal';
 import SkeletonLoader from './SkeletonLoader';
 import { useUser } from '../../useAuth';
@@ -106,7 +105,7 @@ const UserProfile = ({
   if (isLoading || !user || !editForm) return <SkeletonLoader isDarkMode={isDarkMode} />;
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-[#070B16] text-slate-200' : 'bg-[#F1F5F9] text-slate-900'} font-['Sora','sans-serif'] selection:bg-violet-500/30`}>
+    <div className={`min-h-screen pt-24 pb-32 transition-colors duration-300 ${isDarkMode ? 'bg-[#070B16] text-slate-200' : 'bg-[#F1F5F9] text-slate-900'} font-['Sora','sans-serif'] selection:bg-violet-500/30`}>
 
       {/* Background blobs */}
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
@@ -116,11 +115,7 @@ const UserProfile = ({
           style={{ filter: 'blur(40px)' }} />
       </div>
 
-      <Header
-        isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
-        onSignOut={onSignOut}
-      />
+
 
       {/* Offline toast */}
       {!isOnline && (
@@ -191,14 +186,7 @@ const UserProfile = ({
         </div>
       </main>
 
-      {/* Bottom navigation only (no side nav) */}
-      <Navigation
-        isDarkMode={isDarkMode}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        user={user}
-        setActiveBottomTab={setActiveBottomTab}
-      />
+
 
       {isEditModalOpen && editForm && (
         <EditProfileModal

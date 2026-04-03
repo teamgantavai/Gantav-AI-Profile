@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import HomeHeader from './HomeHeader';
 import CategoryNav from './CategoryNav';
 import DailyTasks from './DailyTasks';
 import HeroSection from './HeroSection';
@@ -7,7 +6,6 @@ import MentorsSection from './MentorsSection';
 import RecommendedPaths from './RecommendedPaths';
 import ShortsSection from './ShortsSection';
 import TrendingFeed from './TrendingFeed';
-import BottomNav from './BottomNav';
 
 const Home = ({ activeBottomTab, setActiveBottomTab, isDarkMode, setIsDarkMode }) => {
   const [activeTab, setActiveTab] = useState('All');
@@ -40,11 +38,9 @@ const Home = ({ activeBottomTab, setActiveBottomTab, isDarkMode, setIsDarkMode }
   const categories = ['All', 'AI ML', 'Web Dev', 'Python', 'DSA', 'System Design', 'Open Source'];
 
   return (
-    <div className={`min-h-screen font-sans pb-36 selection:bg-violet-500/30 transition-colors duration-500 ${
+    <div className={`min-h-screen font-sans pt-24 pb-32 selection:bg-violet-500/30 transition-colors duration-500 ${
       isDarkMode ? 'bg-[#050810] text-white' : 'bg-[#F1F5F9] text-slate-900'
     }`}>
-      <HomeHeader isVisible={isVisible} isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-      
       <CategoryNav 
         categories={categories} 
         activeTab={activeTab} 
@@ -66,12 +62,7 @@ const Home = ({ activeBottomTab, setActiveBottomTab, isDarkMode, setIsDarkMode }
         <TrendingFeed isDarkMode={isDarkMode} />
       </div>
 
-      <BottomNav 
-        isVisible={isVisible} 
-        activeBottomTab={activeBottomTab} 
-        setActiveBottomTab={setActiveBottomTab}
-        isDarkMode={isDarkMode}
-      />
+
 
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scrollbar::-webkit-scrollbar { display: none; }
